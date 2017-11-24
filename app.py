@@ -42,7 +42,6 @@ class ApiHandler(web.RequestHandler):
     @web.asynchronous
     def post(self):
         #print "ApiHandler post ()"
-        #print "ApiHandler post ()"
         #print self.request.body
         try:
             json_dict = tornado.escape.json_decode(self.request.body)
@@ -51,50 +50,29 @@ class ApiHandler(web.RequestHandler):
             json_dict = None
         self.finish()
 
-        id = json_dict['termid']
+        id = json_dict['loc']
         amount = json_dict['amount']
-        game = json_dict['game']
+        game = json_dict['event']
         try:
             g = ddict[id]
             
             g1 = g.split(';')
             flat = float(g1[0])
             flng = float(g1[1])
-            data = {"game":game, "lat":flat, "lng":flng, "amount":amount}
+            data = {"event":game, "lat":flat, "lng":flng, "amount":amount}
             print "data",data 
             for c in cl:
-                print "her"
-                #push nye verdier til browser
+                #push new values to browser
                 item = json.dumps(data, default=dthandler)
                 print item
                 c.write_message(item)
         except:
             print "not found ", id   
 
-    def get(self, *args):
-        global items
-        self.finish()
-        print "ApiHandler GET: "
-        game = self.get_argument("game")
-        id = self.get_argument("id")
-        amt = self.get_argument("amount")
-        print game," ", ip," ",amt
-        g = ddict[id]
-        g1 = g.split(';')
-        flat = float(g1[0])
-        flng = float(g1[1])   
-        data = {"game":game, "lat":flat, "lng":flng, "amount":amt}
-        print data
-        d = json.dumps(data, dthandler)
-        print d
-        for c in cl:
-            c.write_message(d)        
 
 app = web.Application([
     (r'/ws', SocketHandler),
-    (r'/api', ApiHandler),
-    (r'/(favicon.ico)', web.StaticFileHandler, {'path': '../'}),
-    (r'/(rest_api_example.png)', web.StaticFileHandler, {'path': './'}),
+    (r'/api', ApiHandler)
 ])
 
 table = []
