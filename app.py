@@ -16,7 +16,7 @@ cl = []
 
 def check_origin(self,origin):
     parsed_origin = urllib.parse.urlparser(origin)
-    return parsed_origin.netloc.endswith(".local")
+    return parsed_origin.netloc.endswith(".svc")
 
 #
 
@@ -105,7 +105,7 @@ geo = []
 ddict = {}
 dctTable = {}
 if __name__ == '__main__':
-    for line in open('/opt/app-root/src/geolok.txt'):
+    for line in open('/opt/app-root/src/geoloc.txt'):
         w = line.strip().split(' ')
         id.append(w[2])
         geo.append( w[3] + ";" + w[4])
